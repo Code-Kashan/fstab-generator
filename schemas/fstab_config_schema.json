@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "fstab yml config schema",
+  "description": "Schema used by script.py for validation of fstab yml structure",
+  "type": "object",
+  "properties": {
+    "fstab": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "properties": {
+            "mount": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "export": {
+              "type": "string"
+            },
+            "dump": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            },
+            "fsck": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "root-reserve":{
+              "type": "string",
+              "pattern": "^[1-9][0-9]?%$"
+            }
+          },
+          "required": [
+            "mount",
+            "type"
+          ],
+          "if": {
+            "properties": {
+              "type": {
+                "const": "nfs"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "mount",
+              "type",
+              "export"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "fstab"
+  ]
+}
